@@ -1,0 +1,45 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+from sklearn.datasets import load_iris
+iris=load_iris()
+X=iris.data
+y=iris.target
+
+print(iris.DESCR)
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20\
+                                                   , random_state =23)
+print(iris.data.shape)
+print('Training Set', len(X_train))
+print('Test Set', len(X_test))
+
+from sklearn.neighbors import KNeighborsClassifier
+knn=KNeighborsClassifier(n_neighbors=3)
+knn.fit(X_train,y_train)
+
+from sklearn import metrics
+print("accuracy=",metrics.accuracy_score(y_pred,y_test))
+from sklearn.metrics import classification_report, confusion_matrix
+print(confusion_matrix(y_test, y_pred))
+print(classification_report(y_test, y_pred))
+
+#to compare the actual and predicted are correct or wrong
+predicted=knn.predict(X_test)
+#create a list for all the predicted one target name
+pre_target=[iris.target_names[i] for i in predicted]
+print("pre_target=",pre_target,"\n\n")
+#create a list for all the target names of y_test data
+actual_target=[iris.target_names[i] for i in y_test]
+print("actual_target =",actual_target,"\n\n")
+print("\t Predicted","\t\tActual","\t\t\tAnswer")
+for i in range(0,len(pre_target)):
+    print(i,":",pre_target[i],"\t\t",actual_target[i],"\t\t",end='\t')
+    if(pre_target[i]==actual_target[i]):
+        print("Yes")
+    else:
+        print("No")
+
+

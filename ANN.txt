@@ -1,0 +1,53 @@
+import numpy as np
+x=np.array(([2,9],[1,5],[3,6]),dtype=float)
+y=np.array(([92],[86],[89]),dtype=float)
+x=x/np.amax(x,axis=0)
+actual_output=y/100
+print(x)
+print(actual_output)
+
+def sigmoid(x):
+    return 1/(1+np.exp(-x))
+def d_sigmoid(x):
+    return x*(1-x)
+
+epoch=1000
+learning_rate=0.15
+input_layer=2
+hidden=3
+output=1
+
+wh=np.random.uniform(low=-0.05,high=0.05,size=(input_layer,hidden))
+print(wh)
+bh=np.random.uniform(low=-0.05,high=0.05,size=(1,hidden))
+wo=np.random.uniform(low=-0.05,high=0.05,size=(hidden,output))
+bo=np.random.uniform(low=-0.05,high=0.05,size=(1,output))
+
+for i in range(epoch):
+    net_h=np.dot(x,wh)+bh
+    sigma=sigmoid(net_h)
+    net_o=np.dot(sigma,wo)+bo
+    output=sigmoid(net_o)
+    
+    eo=actual_output-output
+    outgard=d_sigmoid(output)
+    d_output=eo*outgard
+    
+    eh=d_output.dot(wo.T)
+    hiddengard=d_sigmoid(sigma)
+    d_hidden=eh*hiddengard
+    
+    wo+=sigma.T.dot(d_output)*learning_rate
+    wh+=x.T.dot(d_hidden)*learning_rate
+    
+    sum_error=0
+    for j in range(len(actual_output)):
+        print(output[j],actual_output[j])
+        sum_error=((output[j]-actual_output[j])**2)
+    sum_error/=2
+print(f'epoch{i},error{sum_error}')
+
+
+print('input',str(x))
+print('actual_output',str(actual_output))
+print('predicted',output)
